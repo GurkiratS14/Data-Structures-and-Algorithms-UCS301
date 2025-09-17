@@ -1,26 +1,50 @@
 #include <iostream>
-#include <queue>
 using namespace std;
 
-int main() {
-    string s;
-    cout << "Enter string: ";
-    cin >> s;
+struct Node {
+    int data;
+    Node* next;
+};
+Node* head = NULL;
 
-    queue<char> q;
-    int freq[256] = {0};   // frequency array for ASCII chars
-
-    for (char c : s) {
-        freq[c]++;
-        q.push(c);
-
-        // Remove characters from queue until front is non-repeating
-        while (!q.empty() && freq[q.front()] > 1) {
-            q.pop();
-        }
-
-        if (q.empty()) cout << "-1 ";
-        else cout << q.front() << " ";
+void insertEnd(int val) {
+    Node* newNode = new Node{val, NULL};
+    if (!head) head = newNode;
+    else {
+        Node* temp = head;
+        while (temp->next) temp = temp->next;
+        temp->next = newNode;
     }
+}
+
+void reverseList() {
+    Node* prev = NULL;
+    Node* curr = head;
+    Node* next = NULL;
+    while (curr) {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    head = prev;
+}
+
+void display() {
+    Node* temp = head;
+    while (temp) { cout << temp->data; if(temp->next) cout<<"->"; temp = temp->next; }
+    cout << "->NULL" << endl;
+}
+
+int main() {
+    int n, x;
+    cout << "Enter number of nodes: ";
+    cin >> n;
+    cout << "Enter values: ";
+    for (int i = 0; i < n; i++) { cin >> x; insertEnd(x); }
+
+    cout << "Original List: "; display();
+    reverseList();
+    cout << "Reversed List: "; display();
     return 0;
 }

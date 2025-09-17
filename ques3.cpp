@@ -1,30 +1,38 @@
 #include <iostream>
-#include <queue>
 using namespace std;
 
-void interleaveQueue(queue<int> &q) {
-    int n = q.size() / 2;
-    queue<int> firstHalf;
-    for (int i = 0; i < n; i++) {
-        firstHalf.push(q.front());
-        q.pop();
-    }
-    while (!firstHalf.empty()) {
-        q.push(firstHalf.front()); firstHalf.pop();
-        q.push(q.front()); q.pop();
+struct Node {
+    int data;
+    Node* next;
+};
+Node* head = NULL;
+
+void insertEnd(int val) {
+    Node* newNode = new Node{val, NULL};
+    if (!head) head = newNode;
+    else {
+        Node* temp = head;
+        while (temp->next) temp = temp->next;
+        temp->next = newNode;
     }
 }
 
-int main() {
-    queue<int> q;
-    int n, x;
-    cout << "Enter number of elements (even): ";
-    cin >> n;
-    cout << "Enter elements: ";
-    for (int i = 0; i < n; i++) { cin >> x; q.push(x); }
+int findMiddle() {
+    Node* slow = head;
+    Node* fast = head;
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    return slow ? slow->data : -1;
+}
 
-    interleaveQueue(q);
-    cout << "Interleaved Queue: ";
-    while (!q.empty()) { cout << q.front() << " "; q.pop(); }
+int main() {
+    int n, x;
+    cout << "Enter number of nodes: ";
+    cin >> n;
+    cout << "Enter values: ";
+    for (int i = 0; i < n; i++) { cin >> x; insertEnd(x); }
+    cout << "Middle: " << findMiddle() << endl;
     return 0;
 }

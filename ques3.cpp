@@ -1,35 +1,30 @@
 #include <iostream>
-#include <stack>
+#include <queue>
 using namespace std;
 
-bool isBalanced(string expr) {
-    stack<char> st;
-    for (char c : expr) {
-        if (c == '(' || c == '{' || c == '[') {
-            st.push(c);
-        } else if (c == ')' || c == '}' || c == ']') {
-            if (st.empty()) return false;
-            char top = st.top();
-            st.pop();
-            if ((c == ')' && top != '(') ||
-                (c == '}' && top != '{') ||
-                (c == ']' && top != '[')) {
-                return false;
-            }
-        }
+void interleaveQueue(queue<int> &q) {
+    int n = q.size() / 2;
+    queue<int> firstHalf;
+    for (int i = 0; i < n; i++) {
+        firstHalf.push(q.front());
+        q.pop();
     }
-    return st.empty();
+    while (!firstHalf.empty()) {
+        q.push(firstHalf.front()); firstHalf.pop();
+        q.push(q.front()); q.pop();
+    }
 }
 
 int main() {
-    string expr;
-    cout << "Enter expression: ";
-    cin >> expr;
+    queue<int> q;
+    int n, x;
+    cout << "Enter number of elements (even): ";
+    cin >> n;
+    cout << "Enter elements: ";
+    for (int i = 0; i < n; i++) { cin >> x; q.push(x); }
 
-    if (isBalanced(expr))
-        cout << "Balanced\n";
-    else
-        cout << "Not Balanced\n";
-
+    interleaveQueue(q);
+    cout << "Interleaved Queue: ";
+    while (!q.empty()) { cout << q.front() << " "; q.pop(); }
     return 0;
 }

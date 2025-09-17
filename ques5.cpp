@@ -1,32 +1,56 @@
 #include <iostream>
-#include <stack>
-#include <cctype>
+#include <queue>
 using namespace std;
 
-int evaluatePostfix(string expr) {
-    stack<int> st;
-    for (char c : expr) {
-        if (isdigit(c)) {
-            st.push(c - '0');  // convert char to int
-        } else {
-            int val2 = st.top(); st.pop();
-            int val1 = st.top(); st.pop();
-            switch (c) {
-                case '+': st.push(val1 + val2); break;
-                case '-': st.push(val1 - val2); break;
-                case '*': st.push(val1 * val2); break;
-                case '/': st.push(val1 / val2); break;
-            }
+// (a) Stack using two queues
+class StackTwoQ {
+    queue<int> q1, q2;
+public:
+    void push(int x) {
+        q2.push(x);
+        while (!q1.empty()) { q2.push(q1.front()); q1.pop(); }
+        swap(q1, q2);
+    }
+    void pop() {
+        if (q1.empty()) cout << "Stack empty\n";
+        else { cout << q1.front() << " removed\n"; q1.pop(); }
+    }
+    void top() {
+        if (q1.empty()) cout << "Stack empty\n";
+        else cout << "Top: " << q1.front() << endl;
+    }
+};
+
+// (b) Stack using one queue
+class StackOneQ {
+    queue<int> q;
+public:
+    void push(int x) {
+        q.push(x);
+        for (int i = 0; i < q.size()-1; i++) {
+            q.push(q.front());
+            q.pop();
         }
     }
-    return st.top();
-}
+    void pop() {
+        if (q.empty()) cout << "Stack empty\n";
+        else { cout << q.front() << " removed\n"; q.pop(); }
+    }
+    void top() {
+        if (q.empty()) cout << "Stack empty\n";
+        else cout << "Top: " << q.front() << endl;
+    }
+};
 
 int main() {
-    string expr;
-    cout << "Enter postfix expression: ";
-    cin >> expr;
+    StackTwoQ s1;
+    StackOneQ s2;
+    int ch, val;
+    cout << "Stack using Two Queues:\n";
+    s1.push(10); s1.push(20); s1.top(); s1.pop();
 
-    cout << "Result: " << evaluatePostfix(expr) << endl;
+    cout << "\nStack using One Queue:\n";
+    s2.push(30); s2.push(40); s2.top(); s2.pop();
+
     return 0;
 }

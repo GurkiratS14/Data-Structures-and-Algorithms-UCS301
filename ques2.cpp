@@ -1,46 +1,20 @@
 #include<iostream>
+#include<vector>
 using namespace std;
 
-int size;
-
-void Delete(int pos,int arr[]){
-    for(int k=pos;k<size;++k){
-        arr[k]=arr[k+1];
-
-    }
-    --size;
-}
-
-
 int main(){
-    
-    
-    cout<<"Enter the size of array: ";
-    cin>>size;
-    int arr[size];
-
-    cout<<"---Enter the elements in the array---"<<endl;
-
-    for (int i=0;i<size;++i){
-        cin>>arr[i];
-    }
-
-    for(int i=0;i<size-1;++i){
-        for(int j=i+1;j<size;++j){
-            if (arr[i]==arr[j]){
-                Delete(j,arr);
-                --j;
+    vector<int>arr={64,34,25,12,22,11,90};
+    for(int i=0;i<arr.size()-1;i++){
+        for(int j=0;j<arr.size()-i-1;j++){ //important
+            if(arr[j]>arr[j+1]){
+                swap(arr[j],arr[j+1]);
             }
         }
     }
-
-    cout<<"---Unique Elements in the Array---"<<endl;
-
-    for(int i=0;i<size;++i){
-        cout<<arr[i]<<" ";
+    cout<<"Sorted elements: ";
+    for(int val : arr){
+        cout<<val<<" ";
     }
     cout<<endl;
-
     return 0;
-
 }

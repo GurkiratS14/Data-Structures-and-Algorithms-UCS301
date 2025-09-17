@@ -1,41 +1,20 @@
-#include<iostream>
+#include <iostream>
+#include <string>
 using namespace std;
 
-int main(){
-    int row,col;
+int main() {
+    string str;
+    cout << "Enter a string: ";
+    getline(cin, str);
 
-    cout<<"---Matrix---"<<endl;
-    cout<<"Enter the number of rows in matrix: ";
-    cin>>row;
-    cout<<"Enter the number of coloumns in matrix: ";
-    cin>>col;
-
-    int matrix[row][col];
-
-    cout<<"Enter the elements in matrix: "<<endl;
-    for(int i=0;i<row;++i){
-        for(int j=0;j<col;++j){
-            cin>>matrix[i][j];
+    string result = "";
+    for(char c : str) {
+        if(c!='a' && c!='e' && c!='i' && c!='o' && c!='u' &&
+           c!='A' && c!='E' && c!='I' && c!='O' && c!='U') {
+            result += c;
         }
     }
-
-    int transpose[col][row];
-
-    for(int i=0;i<row;++i){
-        for(int j=0;j<col;++j){
-            transpose[j][i] = matrix[i][j];
-        }
-    }
-
-    cout<<"---Transpose Matrix---"<<endl;
-    for(int i=0;i<col;++i){
-        for(int j=0;j<row;++j){
-            cout<<transpose[i][j]<<" ";
-        }
-        cout<<endl;
-    }
+    cout << "String without vowels: " << result << endl;
 
     return 0;
-
-
 }

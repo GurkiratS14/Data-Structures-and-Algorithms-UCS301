@@ -1,31 +1,16 @@
 #include<iostream>
+#include<string>
 using namespace std;
 
 int main(){
-    int size;
-    cout<<"Enter the size of array: ";
-    cin>>size;
-    int arr[size];
+    string s1,s2;
+    cout<<"Enter first string: ";
+    getline(cin,s1);
+    cout<<"Enter second string: ";
+    getline(cin,s2);
 
-    cout<<"---Enter the elements of the array---"<<endl;
-    for(int i=0;i<size;++i){
-        cin>>arr[i];
-    }
-
-    int arr1[size];
-    for(int i=0;i<size;++i){
-        arr1[i]=arr[size-1-i];
-
-    }
-
-    cout<<"---Reverse Array---"<<endl;
-
-    for(int i=0;i<size;++i){
-        cout<<arr1[i]<<" ";
-    }
-    cout<<endl;
+    s1=s1+s2; //concatenation
+    cout<<"Concatenated String: "<<s1<<endl;
 
     return 0;
-
-
 }

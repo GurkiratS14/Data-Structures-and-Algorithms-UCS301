@@ -1,35 +1,118 @@
 #include<iostream>
-#include<vector>
 using namespace std;
 
-int binarySearch(vector<int> arr,int tar){
-    int st=0; int end=arr.size()-1;
+class Stack{
+    int *arr;
+    int top;
+    int maxsize;
 
-    while(st<=end){
-        int mid=st+(end-st)/2; // optimation; to prevent overflow
+    public: 
+        Stack(int size){
+            maxsize=size;
+            arr=new int[maxsize];
+            top=-1;
+        }
 
-        if(tar>arr[mid]){
-            st=st+1;
+        void push(int x){
+            if(top==maxsize-1){
+                cout<<"Stack overflow!"<<endl;
+            }
+            else{
+                arr[++top]=x;
+            }
         }
-        else if(tar<arr[mid]){
-            end=mid-1;
+
+        void pop(){
+            if(top==-1){
+                cout<<"Stack underflow!"<<endl;
+            }
+            else{
+                top--;
+            }
         }
-        else{
-            return mid;
+        void display(){
+            if(top==-1){
+                cout<<"Stack is empty!"<<endl;
+            }
+            else{
+                for(int i=top;i>=0;i--){
+                    cout<<arr[i]<<" ";
+                }
+                cout<<endl;
+            }
         }
-    }
-    return -1;
-}
+        void peek(){
+            if(top==-1){
+                cout<<"Stack is empty!"<<endl;
+            }
+            else{
+                cout<<"Last element is: "<<arr[top]<<endl;
+            }
+        }
+        bool isEmpty(){
+            return(top==-1);
+        }
+        bool isFull(){
+            return (top==maxsize-1);
+        }
+
+};
 
 int main(){
-    vector<int>arr1={-1,0,3,4,5,9,12};
-    int tar1=12;
+    int size;
+    cout<<"Enter size: ";
+    cin>>size;
+    Stack s(size);
+    int choice,val;
 
-    cout<<"Index at element found: "<<binarySearch(arr1,tar1)<<endl;
+    do{
+        cout<<"---Menu Driven Program (Stack)---"<<endl;
+        cout<<"1.Push"<<endl;
+        cout<<"2.Pop"<<endl;
+        cout<<"3.Peek"<<endl;
+        cout<<"4.Display"<<endl;
+        cout<<"5.Check if empty"<<endl;
+        cout<<"6.Check if full"<<endl;
+        cout<<"7.Exit"<<endl;
+        cout<<"Enter choice: ";
+        cin>>choice;
+        
+        switch(choice){
+            case 1:
+            cout<<"Enter value to push: ";
+            cin>>val;
+            s.push(val);
+            break;
 
-    
+            case 2:
+            s.pop();
+            break;
+
+            case 3:
+            s.peek();
+            break;
+
+            case 4:
+            s.display();
+            break;
+
+            case 5:
+            cout<< (s.isEmpty() ? "Stack is empty.\n" : "Stack is not empty.\n");
+            break;
+
+            case 6:
+            cout << (s.isFull() ? "Stack is full.\n" : "Stack is not full.\n");
+            break;
+
+
+            case 7:
+            cout<<"Exiting Program..."<<endl;
+            break;
+
+            default:
+            cout<<"Invalid choice!"<<endl;
+        }
+    } while(choice !=7);
 
     return 0;
-
-
 }

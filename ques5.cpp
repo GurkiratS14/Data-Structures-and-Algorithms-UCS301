@@ -1,56 +1,117 @@
 #include <iostream>
-#include <queue>
 using namespace std;
 
-// (a) Stack using two queues
-class StackTwoQ {
-    queue<int> q1, q2;
-public:
-    void push(int x) {
-        q2.push(x);
-        while (!q1.empty()) { q2.push(q1.front()); q1.pop(); }
-        swap(q1, q2);
-    }
-    void pop() {
-        if (q1.empty()) cout << "Stack empty\n";
-        else { cout << q1.front() << " removed\n"; q1.pop(); }
-    }
-    void top() {
-        if (q1.empty()) cout << "Stack empty\n";
-        else cout << "Top: " << q1.front() << endl;
-    }
-};
+class HeapSort {
+private:
+    int arr[50];     
+    int n;          
 
-// (b) Stack using one queue
-class StackOneQ {
-    queue<int> q;
-public:
-    void push(int x) {
-        q.push(x);
-        for (int i = 0; i < q.size()-1; i++) {
-            q.push(q.front());
-            q.pop();
+  
+    void heapifyMax(int arr[], int n, int i) {
+        int largest = i;           // root
+        int left = 2 * i + 1;      // left child
+        int right = 2 * i + 2;     // right child
+
+        if (left < n && arr[left] > arr[largest])
+            largest = left;
+
+        if (right < n && arr[right] > arr[largest])
+            largest = right;
+
+        if (largest != i) {
+            int temp = arr[i];
+            arr[i] = arr[largest];
+            arr[largest] = temp;
+            heapifyMax(arr, n, largest);
         }
     }
-    void pop() {
-        if (q.empty()) cout << "Stack empty\n";
-        else { cout << q.front() << " removed\n"; q.pop(); }
+
+   
+    void heapifyMin(int arr[], int n, int i) {
+        int smallest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < n && arr[left] < arr[smallest])
+            smallest = left;
+
+        if (right < n && arr[right] < arr[smallest])
+            smallest = right;
+
+        if (smallest != i) {
+            int temp = arr[i];
+            arr[i] = arr[smallest];
+            arr[smallest] = temp;
+            heapifyMin(arr, n, smallest);
+        }
     }
-    void top() {
-        if (q.empty()) cout << "Stack empty\n";
-        else cout << "Top: " << q.front() << endl;
+
+public:
+    HeapSort() {
+        n = 0;
+    }
+
+    void input() {
+        cout << "Enter number of elements: ";
+        cin >> n;
+        cout << "Enter " << n << " elements:\n";
+        for (int i = 0; i < n; i++)
+            cin >> arr[i];
+    }
+
+   
+    void sortIncreasing() {
+        // Build max heap
+        for (int i = n / 2 - 1; i >= 0; i--)
+            heapifyMax(arr, n, i);
+
+        // Extract elements one by one
+        for (int i = n - 1; i >= 0; i--) {
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+
+            heapifyMax(arr, i, 0);
+        }
+    }
+
+    
+    void sortDecreasing() {
+        // Build min heap
+        for (int i = n / 2 - 1; i >= 0; i--)
+            heapifyMin(arr, n, i);
+
+        // Extract elements one by one
+        for (int i = n - 1; i >= 0; i--) {
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+
+            heapifyMin(arr, i, 0);
+        }
+    }
+
+    void display() {
+        for (int i = 0; i < n; i++)
+            cout << arr[i] << " ";
+        cout << endl;
     }
 };
 
 int main() {
-    StackTwoQ s1;
-    StackOneQ s2;
-    int ch, val;
-    cout << "Stack using Two Queues:\n";
-    s1.push(10); s1.push(20); s1.top(); s1.pop();
+    HeapSort h;
+    h.input();
 
-    cout << "\nStack using One Queue:\n";
-    s2.push(30); s2.push(40); s2.top(); s2.pop();
+    cout << "\nOriginal array: ";
+    h.display();
+
+    h.sortIncreasing();
+    cout << "Sorted in Increasing order: ";
+    h.display();
+
+    h.sortDecreasing();
+    cout << "Sorted in Decreasing order: ";
+    h.display();
 
     return 0;
 }

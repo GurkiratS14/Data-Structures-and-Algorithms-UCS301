@@ -1,50 +1,102 @@
 #include <iostream>
 using namespace std;
 
-struct Node {
+class Node {
+public:
     int data;
-    Node* next;
+    Node* left;
+    Node* right;
+
+    Node(int value) {
+        data = value;
+        left = right = nullptr;
+    }
 };
-Node* head = NULL;
 
-void insertEnd(int val) {
-    Node* newNode = new Node{val, NULL};
-    if (!head) head = newNode;
-    else {
-        Node* temp = head;
-        while (temp->next) temp = temp->next;
-        temp->next = newNode;
+class BinaryTree {
+private:
+    Node* root;
+
+    
+    Node* insert(Node* node, int value) {
+        if (node == nullptr)
+            return new Node(value);
+        if (value < node->data)
+            node->left = insert(node->left, value);
+        else if (value > node->data)
+            node->right = insert(node->right, value);
+        return node;
     }
-}
 
-void reverseList() {
-    Node* prev = NULL;
-    Node* curr = head;
-    Node* next = NULL;
-    while (curr) {
-        next = curr->next;
-        curr->next = prev;
-        prev = curr;
-        curr = next;
+
+    bool isBSTUtil(Node* node, int min, int max) {
+        if (node == nullptr)
+            return true;
+        if (node->data <= min || node->data >= max)
+            return false;
+        return (isBSTUtil(node->left, min, node->data) &&
+                isBSTUtil(node->right, node->data, max));
     }
-    head = prev;
-}
 
-void display() {
-    Node* temp = head;
-    while (temp) { cout << temp->data; if(temp->next) cout<<"->"; temp = temp->next; }
-    cout << "->NULL" << endl;
-}
+
+    void inorder(Node* node) {
+        if (node == nullptr) return;
+        inorder(node->left);
+        cout << node->data << " ";
+        inorder(node->right);
+    }
+
+public:
+    BinaryTree() { root = nullptr; }
+
+    
+    void insert(int value) {
+        root = insert(root, value);
+    }
+
+    // Function to check if current tree is BST
+    void checkBST() {
+        if (isBSTUtil(root, -100000, 100000))
+            cout << "The given binary tree IS a BST.\n";
+        else
+            cout << "The given binary tree is NOT a BST.\n";
+    }
+
+    void display() {
+        cout << "In-order Traversal: ";
+        inorder(root);
+        cout << endl;
+    }
+
+    
+    void createNonBST() {
+        root = new Node(10);
+        root->left = new Node(5);
+        root->right = new Node(8); // violates BST property
+    }
+};
 
 int main() {
-    int n, x;
-    cout << "Enter number of nodes: ";
-    cin >> n;
-    cout << "Enter values: ";
-    for (int i = 0; i < n; i++) { cin >> x; insertEnd(x); }
+    BinaryTree tree1;
+    
+    tree1.insert(50);
+    tree1.insert(30);
+    tree1.insert(70);
+    tree1.insert(20);
+    tree1.insert(40);
+    tree1.insert(60);
+    tree1.insert(80);
 
-    cout << "Original List: "; display();
-    reverseList();
-    cout << "Reversed List: "; display();
+    tree1.display();
+    tree1.checkBST();
+
+    cout << endl;
+
+    
+    BinaryTree tree2;
+    tree2.createNonBST();
+    tree2.display();
+    tree2.checkBST();
+
     return 0;
 }
